@@ -63,7 +63,7 @@ $$\text{SN}_{k+1} = (\text{SN}_k + 1) \pmod{256}$$
 
 Let $f_a$ and $f_b$ be two captured frames with identical subscriber identity and sequence number:
 
-$$\text{UE}(f_a) = \text{UE}(f_b) = u, \quad \text{SN}(f_a) = \text{SN}(f_b) = s, \quad t(f_a) < t(f_b)$$
+$$\text{UE}(f_a) = \text{UE}(f_b) = u, \quad \text{SN}(f_a) = \text{SN}(f_b) = s, \quad t(f_a) \lt t(f_b)$$
 
 #### Case A: Legitimate Retransmission
 A transmission is dropped at the PHY/MAC layer. The sender's retransmission timer $T_{\mathrm{retrans}}$ expires before receiving a downlink ACK:
@@ -85,7 +85,7 @@ $$\max_{f_i \in (f_a, f_{\mathrm{replay}})} \text{SN}(f_i) \ge s + 2$$
 
 The appearance of sequence number $s$ after the state machine has already advanced to $s+2$ violates causality:
 
-$$\text{SN}(f_{\mathrm{replay}}) < \text{SN}_{\mathrm{active}}$$
+$$\text{SN}(f_{\mathrm{replay}}) \lt \text{SN}_{\mathrm{active}}$$
 
 A physical UE firmware would never legitimately decrement its internal NAS sequence counter back to an earlier retired state. This mathematically flags $f_{\mathrm{replay}}$ as an unauthorized external injection.
 
@@ -104,8 +104,8 @@ A physical UE firmware would never legitimately decrement its internal NAS seque
    - Bucket frames by `ue_id`.
    - Compile a chronological trace vector of uplink frames: $\mathcal{T}_u = [(f_i, t_i, \text{SN}_i)]$.
 4. **State Machine Anomaly Inspection**:
-   - For each subscriber, track the maximum observed uplink sequence number $\text{SN}_{\max}$.
-   - If a frame arrives with $\text{SN}_k < \text{SN}_{\max}$, verify whether it is a delayed replay.
+   - For each subscriber, track the maximum observed uplink sequence number `SN_max`.
+   - If a frame arrives with `SN_k < SN_max`, verify whether it is a delayed replay.
    - For UE `4217`, the sequence progression is:
      - Frame 48: Seq 4
      - Frame 78: Seq 5
