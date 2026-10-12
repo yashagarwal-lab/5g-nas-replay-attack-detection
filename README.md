@@ -55,7 +55,7 @@ NAS protocol signaling in this environment is transported over UDP encapsulating
 
 ### 3.2 Monotonic Sequence State Machine
 
-For an honest subscriber session identified by $\text{UE\_ID}$, the uplink sequence counter must satisfy strict forward monotonicity under ideal channel conditions:
+For an honest subscriber session identified by `UE_ID`, the uplink sequence counter must satisfy strict forward monotonicity under ideal channel conditions:
 
 $$\text{SN}_{k+1} = (\text{SN}_k + 1) \pmod{256}$$
 
@@ -66,9 +66,9 @@ Let $f_a$ and $f_b$ be two captured frames with identical subscriber identity an
 $$\text{UE}(f_a) = \text{UE}(f_b) = u, \quad \text{SN}(f_a) = \text{SN}(f_b) = s, \quad t(f_a) < t(f_b)$$
 
 #### Case A: Legitimate Retransmission
-A transmission is dropped at the PHY/MAC layer. The sender's retransmission timer $T_{\text{retrans}}$ expires before receiving a downlink ACK:
+A transmission is dropped at the PHY/MAC layer. The sender's retransmission timer $T_{\mathrm{retrans}}$ expires before receiving a downlink ACK:
 
-$$\Delta t = t(f_b) - t(f_a) \le T_{\text{retrans}} \quad (\sim 10..50\,\text{ms})$$
+$$\Delta t = t(f_b) - t(f_a) \le T_{\mathrm{retrans}} \quad (\sim 10..50\,\text{ms})$$
 
 Crucially, **no intervening messages with higher sequence numbers have been transmitted**:
 
@@ -77,17 +77,17 @@ $$\max_{f_i \in (f_a, f_b)} \text{SN}(f_i) = s$$
 The session state machine has paused awaiting acknowledgement; no forward progress has occurred.
 
 #### Case B: Adversarial Replay Attack
-The adversary captures frame $f_a$ with sequence number $s$. Communication continues legitimately: the UE transmits $s+1, s+2, \dots, s+k$. At a later epoch $t(f_{\text{replay}})$, the adversary injects the captured frame:
+The adversary captures frame $f_a$ with sequence number $s$. Communication continues legitimately: the UE transmits $s+1, s+2, \dots, s+k$. At a later epoch $t(f_{\mathrm{replay}})$, the adversary injects the captured frame:
 
-$$\Delta t = t(f_{\text{replay}}) - t(f_a) \gg T_{\text{retrans}}$$
+$$\Delta t = t(f_{\mathrm{replay}}) - t(f_a) \gg T_{\mathrm{retrans}}$$
 
-$$\max_{f_i \in (f_a, f_{\text{replay}})} \text{SN}(f_i) \ge s + 2$$
+$$\max_{f_i \in (f_a, f_{\mathrm{replay}})} \text{SN}(f_i) \ge s + 2$$
 
 The appearance of sequence number $s$ after the state machine has already advanced to $s+2$ violates causality:
 
-$$\text{SN}(f_{\text{replay}}) < \text{SN}_{\text{active}}$$
+$$\text{SN}(f_{\mathrm{replay}}) < \text{SN}_{\mathrm{active}}$$
 
-A physical UE firmware would never legitimately decrement its internal NAS sequence counter back to an earlier retired state. This mathematically flags $f_{\text{replay}}$ as an unauthorized external injection.
+A physical UE firmware would never legitimately decrement its internal NAS sequence counter back to an earlier retired state. This mathematically flags $f_{\mathrm{replay}}$ as an unauthorized external injection.
 
 ---
 
