@@ -43,7 +43,9 @@ class NASMsg:
         return f"Frame {self.frame_num:3d} | UE {self.ue_id:4d} | {dir_str} | Type 0x{self.msg_type:02X} | Seq {self.seq_num:3d}"
 
 messages = []
-for frame_num, data in parse_pcap("nas_signalling.pcap"):
+import os
+pcap_f = "data/nas_signalling.pcap" if os.path.exists("data/nas_signalling.pcap") else "nas_signalling.pcap"
+for frame_num, data in parse_pcap(pcap_f):
     messages.append(NASMsg(frame_num, data))
 
 for m in messages:
